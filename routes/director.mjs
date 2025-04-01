@@ -1,6 +1,6 @@
 import express from 'express';
 import Director from '../models/Director.mjs';
-import Movie from '../models/Movie.mjs'; // Importar el modelo Movie
+import Movie from '../models/Movie.mjs'; 
 import { authenticateToken } from '../middleware/auth.mjs';
 
 const router = express.Router();
@@ -38,6 +38,8 @@ const router = express.Router();
  *     responses:
  *       201:
  *         description: Director creado exitosamente
+ *       400:
+ *         description: Algunas películas no fueron encontradas
  *       500:
  *         description: Error al crear el director
  */
@@ -61,7 +63,24 @@ router.post('/', authenticateToken, async (req, res) => {
     }
 });
 
-// Obtener todos los directores
+/**
+ * @swagger
+ * /directors:
+ *   get:
+ *     summary: Obtener todos los directores
+ *     tags: [Directors]
+ *     responses:
+ *       200:
+ *         description: Lista de directores
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Director'
+ *       500:
+ *         description: Error al obtener los directores
+ */
 router.get('/', authenticateToken, async (req, res) => {
     try {
         const directors = await Director.find();
@@ -71,7 +90,27 @@ router.get('/', authenticateToken, async (req, res) => {
     }
 });
 
-// Obtener un director por ID
+/**
+ * @swagger
+ * /directors/{id}:
+ *   get:
+ *     summary: Obtener un director por ID
+ *     tags: [Directors]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: number
+ *         required: true
+ *         description: ID del director a obtener
+ *     responses:
+ *       200:
+ *         description: Director encontrado
+ *       404:
+ *         description: Director no encontrado
+ *       500:
+ *         description: Error al obtener el director
+ */
 router.get('/:id', authenticateToken, async (req, res) => {
     try {
         const director = await Director.findOne({ id: req.params.id });
@@ -84,7 +123,42 @@ router.get('/:id', authenticateToken, async (req, res) => {
     }
 });
 
-// Actualizar un director por ID
+/**
+ * @swagger
+ * /directors/{id}:
+ *   put:
+ *     summary: Actualizar un director por ID
+ *     tags: [Directors]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: number
+ *         required: true
+ *         description: ID del director a actualizar
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               country:
+ *                 type: string
+ *               movies:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       200:
+ *         description: Director actualizado correctamente
+ *       404:
+ *         description: Director no encontrado
+ *       500:
+ *         description: Error al actualizar el director
+ */
 router.put('/:id', authenticateToken, async (req, res) => {
     try {
         const { name, country, movies } = req.body;
@@ -102,7 +176,27 @@ router.put('/:id', authenticateToken, async (req, res) => {
     }
 });
 
-// Eliminar un director por ID
+/**
+ * @swagger
+ * /directors/{id}:
+ *   delete:
+ *     summary: Eliminar un director por ID
+ *     tags: [Directors]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: number
+ *         required: true
+ *         description: ID del director a eliminar
+ *     responses:
+ *       200:
+ *         description: Director eliminado correctamente
+ *       404:
+ *         description: Director no encontrado
+ *       500:
+ *         description: Error al eliminar el director
+ */
 router.delete('/:id', authenticateToken, async (req, res) => {
     try {
         const director = await Director.findOneAndDelete({ id: req.params.id });

@@ -36,7 +36,6 @@ const router = express.Router();
  *       500:
  *         description: Error al crear la película
  */
-
 // Crear una nueva película
 router.post('/', authenticateToken, async (req, res) => {
     try {
@@ -50,6 +49,24 @@ router.post('/', authenticateToken, async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /movies:
+ *   get:
+ *     summary: Obtener todas las películas
+ *     tags: [Movies]
+ *     responses:
+ *       200:
+ *         description: Lista de películas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Movie'
+ *       500:
+ *         description: Error al obtener las películas
+ */
 // Obtener todas las películas
 router.get('/', authenticateToken, async (req, res) => {
     try {
@@ -60,6 +77,27 @@ router.get('/', authenticateToken, async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /movies/{id}:
+ *   delete:
+ *     summary: Eliminar una película por ID
+ *     tags: [Movies]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de la película a eliminar
+ *     responses:
+ *       200:
+ *         description: Película eliminada correctamente
+ *       404:
+ *         description: Película no encontrada
+ *       500:
+ *         description: Error al eliminar la película
+ */
 // Eliminar una película por ID
 router.delete('/:id', authenticateToken, async (req, res) => {
     try {
@@ -73,7 +111,41 @@ router.delete('/:id', authenticateToken, async (req, res) => {
     }
 });
 
-//Actualizar perlicula por ID
+/**
+ * @swagger
+ * /movies/{id}:
+ *   put:
+ *     summary: Actualizar una película por ID
+ *     tags: [Movies]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de la película a actualizar
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               year:
+ *                 type: number
+ *               director:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Película actualizada correctamente
+ *       404:
+ *         description: Película no encontrada
+ *       500:
+ *         description: Error al actualizar la película
+ */
+// Actualizar película por ID
 router.put('/:id', authenticateToken, async (req, res) => {
     try {
         const { title, year, director } = req.body;
@@ -86,7 +158,5 @@ router.put('/:id', authenticateToken, async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
-
-
 
 export default router;

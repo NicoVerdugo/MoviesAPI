@@ -13,7 +13,7 @@ const app = express();
 
 // Conectar a la base de datos
 const MONGO_URI = process.env.MONGO_URI;
-mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(MONGO_URI)
     .then(() => console.log('Connected to MongoDB Atlas'))
     .catch((error) => console.error('Error connecting to MongoDB Atlas:', error));
 
