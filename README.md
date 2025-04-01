@@ -43,10 +43,11 @@ Para acceder a la documentación de la API en:
 
 
 ## 🔐 Autenticación
-Todos los endpoints de peliculas y directores requieren autenticación mediante un **token JWT** en el encabezado `Authorization`:
+Todos los endpoints de peliculas y directores requieren autenticación mediante un **token JWT**, esto mediante el encabezado en el encabezado `Authorization`:
 ```sh
 Authorization: Bearer token
 ```
+
 ## 🏗 Arquitectura del Proyecto
 
 - controllers
